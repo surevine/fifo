@@ -14,18 +14,19 @@
 
     data = JSON.parse localStorage.getItem(namespace) or '{"keys":[],"items":{}}'
 
-    trySave = ->
-      json = JSON.stringify data
+    trySave = (key, value) ->
+
       try
-        localStorage.setItem namespace, json
+        if not key
+          localStorage.setItem namespace, JSON.stringify data
+        else
+          localStorage.setItem key, value
         return true
       catch error
         # 22 for Chrome and Safari, 1014 for Firefox
-        if error.code is 22 or error.code is 1-14
+        if error.code is 22 || error.code is 1014
           return false
-
         throw new Error error
-      
 
     removeFirstIn = ->
       firstIn = data.keys.pop()
@@ -33,9 +34,9 @@
       delete data.items[firstIn]
       removedItem
 
-    save = ->
+    save = (key, value) ->
       removed = []
-      until trySave()
+      until trySave key, value
         if data.keys.length
           removed.push removeFirstIn()
         else
@@ -56,6 +57,11 @@
         data.items[key]
       else
         data.items
+        
+    setFixed: (key, value, onRemoved) ->
+      removed = save key, value
+      onRemoved.call this, removed if onRemoved and removed.length
+      this
 
     remove: (victim) ->
       for suspect, index in data.keys when suspect is victim
