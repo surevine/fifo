@@ -62,7 +62,11 @@
       removed = save key, value
       onRemoved.call this, removed if onRemoved and removed.length
       this
-
+            
+    removeFixed: (victim) ->
+      localStorage.removeItem victim
+      this
+        
     remove: (victim) ->
       for suspect, index in data.keys when suspect is victim
         data.keys.splice index, 1
