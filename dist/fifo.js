@@ -18,16 +18,19 @@
     trySave = function(key, value) {
       var error;
       try {
-        localStorage.setItem(key, value);
+        if (!key) {
+          localStorage.setItem(namespace, JSON.stringify(data));
+        } else {
+          localStorage.setItem(key, value);
+        }
+        return true;
       } catch (_error) {
         error = _error;
-        if (error.name === 'QUOTA_EXCEEDED_ERR') {
+        if (error.code === 22 || error.code === 1014) {
           return false;
-        } else {
-          throw new Error(error);
         }
+        throw new Error(error);
       }
-      return true;
     };
     removeFirstIn = function() {
       var firstIn, removedItem;
@@ -41,14 +44,15 @@
     };
     save = function(key, value) {
       var removed;
-      if (!key) {
-        key = namespace;
-        value = JSON.stringify(data);
-      }
       removed = [];
+      console.log('trying to save', key);
       while (!trySave(key, value)) {
+        console.log('until: trying to save', key);
         if (data.keys.length) {
           removed.push(removeFirstIn());
+          if (key) {
+            localStorage.setItem(namespace, JSON.stringify(data));
+          }
         } else {
           throw new Error("All items removed from " + namespace + ", still can't save");
           break;
@@ -78,8 +82,15 @@
         var removed;
         removed = save(key, value);
         if (onRemoved && removed.length) {
-          onRemoved.call(this, remove);
+          onRemoved.call(this, removed);
         }
+        return this;
+      },
+      getFixed: function(key) {
+        return localStorage.getItem(key);
+      },
+      removeFixed: function(victim) {
+        localStorage.removeItem(victim);
         return this;
       },
       remove: function(victim) {

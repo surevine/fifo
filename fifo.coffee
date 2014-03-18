@@ -36,9 +36,12 @@
 
     save = (key, value) ->
       removed = []
-      until trySave key, value
+      console.log 'trying to save', key
+      until trySave(key, value)
+        console.log 'until: trying to save', key
         if data.keys.length
           removed.push removeFirstIn()
+          localStorage.setItem(namespace, JSON.stringify(data)) if key
         else
           throw new Error "All items removed from #{namespace}, still can't save"
           break
@@ -62,6 +65,9 @@
       removed = save key, value
       onRemoved.call this, removed if onRemoved and removed.length
       this
+            
+    getFixed: (key) ->
+      localStorage.getItem key
             
     removeFixed: (victim) ->
       localStorage.removeItem victim
