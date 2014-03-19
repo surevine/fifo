@@ -36,9 +36,7 @@
 
     save = (key, value) ->
       removed = []
-      console.log 'trying to save', key
       until trySave(key, value)
-        console.log 'until: trying to save', key
         if data.keys.length
           removed.push removeFirstIn()
           localStorage.setItem(namespace, JSON.stringify(data)) if key
@@ -60,7 +58,7 @@
         data.items[key]
       else
         data.items
-        
+
     setFixed: (key, value, onRemoved) ->
       removed = save key, value
       onRemoved.call this, removed if onRemoved and removed.length

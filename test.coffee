@@ -19,7 +19,7 @@ equal = (a, b, description) ->
     failed++
 
 # clear it all out first
-localStorage.removeItem 'fifo:test'
+localStorage.clear()
 
 # helpers to create a bunch of data
 repeat = (str, n) ->
@@ -34,7 +34,6 @@ n1k   = repeat n100b, 10
 n10k  = repeat n1k, 10
 n100k = repeat n10k, 10
 n1m   = repeat n100k, 10
-n1m   = repeat n1m, 10
 
 # measure how long it all takes
 start = +new Date()
@@ -84,31 +83,36 @@ collection.removeFixed fixedKey
 fixed = collection.getFixed fixedKey
 equal fixed, null, 'Fixed key has been removed'
 
-# test: Fixed keys can be added once full
-console.log '\n\n\n\n', 'adding fixed key'
-
-i = 0
-limitReached = false
-removedItem = null
+# test: Fixed keys can be added once FIFO queue full
+#       then add additional items to FIFO queue and 
+#       check we keep fixed item
+i                      = 0
+limitReached           = false
+removedItem            = null
 removedItemForFixedKey = null
+removedItemForFifo     = null
 
-onFixedLimit = (items) ->
+moreFifoOnLimit = (items) ->
+  removedItemForFifo = items[0]
+    
+fixedKeyOnLimit = (items) ->
+  removedItemForFixedKey = items[0]
+  collection.set key, n1m, moreFifoOnLimit
+
+fifoQueueOnLimit = (items) ->
   limitReached = true
-  removedItem = items[0].value
-  console.log 'adding fixed key'
-  collection.setFixed 'fixed-key', n1m, (items) ->
-    console.log 'and again'
-    removedItemForFixedKey = items[0].value
-        
+  removedItem = items[0]
+  collection.setFixed 'fixed-key', n1m, fixedKeyOnLimit
+    
 until limitReached or i is 15000 # don't wan't to freeze the browser
   i++
   key = "test:#{i}"
-  collection.set key, n100k, onFixedLimit
+  collection.set key, n100k, fifoQueueOnLimit
     
 equal collection.getFixed('fixed-key').length, n1m.length, 'Fixed value retrieved successfully'
-equal removedItem.key, "item:1", 'Expected value removed'
-equal removedItemForFixedKey.key, "item:2", 'Expected value removed to fit fixed key'
-
+equal removedItem.key, 'test:1', 'Expected value removed'
+equal removedItemForFixedKey.key, 'test:2', 'Expected value removed to fit fixed key'
+equal removedItemForFifo.key, 'test:12', 'Expected value removed from FIFO queue'
 # report
 status = if failed is 0 then 'ok' else 'not ok'
 log "\n#{status}", "#{passed}/#{testCount}"

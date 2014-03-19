@@ -45,9 +45,7 @@
     save = function(key, value) {
       var removed;
       removed = [];
-      console.log('trying to save', key);
       while (!trySave(key, value)) {
-        console.log('until: trying to save', key);
         if (data.keys.length) {
           removed.push(removeFirstIn());
           if (key) {
