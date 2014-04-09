@@ -87,6 +87,25 @@
       getFixed: function(key) {
         return localStorage.getItem(key);
       },
+      keys: function() {
+        var keys;
+        keys = data.keys;
+        Object.keys(localStorage).forEach(function(value) {
+          if (value !== namespace) {
+            return keys.push(value);
+          }
+        });
+        return keys;
+      },
+      has: function(key) {
+        if (-1 !== data.keys.indexOf(key)) {
+          return true;
+        }
+        if (localStorage.getItem(key) !== null) {
+          return true;
+        }
+        return false;
+      },
       removeFixed: function(victim) {
         localStorage.removeItem(victim);
         return this;

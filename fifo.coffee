@@ -66,6 +66,17 @@
             
     getFixed: (key) ->
       localStorage.getItem key
+        
+    keys: ->
+        keys = data.keys
+        Object.keys(localStorage).forEach (value) ->
+          keys.push(value) if value != namespace 
+        return keys
+    
+    has: (key) ->
+        return true if -1 != data.keys.indexOf key
+        return true if localStorage.getItem(key) != null
+        false
             
     removeFixed: (victim) ->
       localStorage.removeItem victim

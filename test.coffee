@@ -113,6 +113,26 @@ equal collection.getFixed('fixed-key').length, n1m.length, 'Fixed value retrieve
 equal removedItem.key, 'test:1', 'Expected value removed'
 equal removedItemForFixedKey.key, 'test:2', 'Expected value removed to fit fixed key'
 equal removedItemForFifo.key, 'test:12', 'Expected value removed from FIFO queue'
+
+# test get keys
+localStorage.clear()
+collection = fifo 'fifo:test'
+collection.setFixed 'fixed-key', 'fixed-value'
+collection.set 'fifo-key', 'fifo-value'
+equal collection.keys().length, 2, 'Keys fetched successfully'
+equal collection.keys()[0], 'fifo-key', 'Fetched fifo key correctly'
+equal collection.keys()[1], 'fixed-key', 'Fetched fixed key correctly'
+
+# test has key
+localStorage.clear()
+collection = fifo 'fifo:test'
+collection.setFixed 'fixed-key', 'fixed-value'
+collection.set 'fifo-key', 'fifo-value'
+equal collection.has('fixed-key'), true, 'Has fixed key'
+equal collection.has('fifo-key'), true, 'Has fifo key'
+equal collection.has('loose-key'), false, 'Hasn\'t loose key'
+
+
 # report
 status = if failed is 0 then 'ok' else 'not ok'
 log "\n#{status}", "#{passed}/#{testCount}"

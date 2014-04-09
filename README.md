@@ -48,6 +48,12 @@ collection.empty()
 // yourself when setting and getting.
 collection.set('task:2', { due: 'sunday', task: 'go to church' });
 collection.set('whatevz', [1,2,3]);
+
+// get a list of all keys, both those in fifo and fixed localstorage
+collection.keys  /* Returns an array of key names */
+
+// Check to see if a key exists in the FIFO queu or fixed localstorage
+collection.has 'key' /* true or false */
 ```
 
 Browser Support
