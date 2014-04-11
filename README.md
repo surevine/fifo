@@ -59,6 +59,11 @@ collection.keys  /* Returns an array of key names */
 collection.has 'key' /* true or false */
 ```
 
+Warning
+--------
+
+It is possible to cause a collision of keys in the fixed storage and FIFO queue. In all cases of 'get' and 'remove' the fixed storage is used in preference.
+
 Browser Support
 ---------------
 
