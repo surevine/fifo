@@ -70,10 +70,17 @@
         return this;
       },
       get: function(key) {
+        var items;
         if (key) {
-          return data.items[key];
+          return localStorage.getItem(key) || data.items[key];
         } else {
-          return data.items;
+          items = data.items;
+          Object.keys(localStorage).forEach(function(key) {
+            if (key !== namespace) {
+              return items[key] = localStorage.getItem(key);
+            }
+          });
+          return items;
         }
       },
       setFixed: function(key, value, onRemoved) {
@@ -83,9 +90,6 @@
           onRemoved.call(this, removed);
         }
         return this;
-      },
-      getFixed: function(key) {
-        return localStorage.getItem(key);
       },
       keys: function() {
         var keys;
@@ -106,12 +110,12 @@
         }
         return false;
       },
-      removeFixed: function(victim) {
-        localStorage.removeItem(victim);
-        return this;
-      },
       remove: function(victim) {
         var index, suspect, _i, _len, _ref;
+        if (localStorage.getItem(victim)) {
+          localStorage.removeItem(victim);
+          return this;
+        }
         _ref = data.keys;
         for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
           suspect = _ref[index];

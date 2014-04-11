@@ -55,17 +55,17 @@
     # no args returns all items
     get: (key) ->
       if key
-        data.items[key]
+        localStorage.getItem(key) or data.items[key]
       else
-        data.items
+        items = data.items
+        Object.keys(localStorage).forEach (key) ->
+          items[key] = localStorage.getItem(key) if key != namespace 
+        items
 
     setFixed: (key, value, onRemoved) ->
       removed = save key, value
       onRemoved.call this, removed if onRemoved and removed.length
       this
-            
-    getFixed: (key) ->
-      localStorage.getItem key
         
     keys: ->
         keys = data.keys
@@ -77,12 +77,11 @@
         return true if -1 != data.keys.indexOf key
         return true if localStorage.getItem(key) != null
         false
-            
-    removeFixed: (victim) ->
-      localStorage.removeItem victim
-      this
         
     remove: (victim) ->
+      if localStorage.getItem victim
+        localStorage.removeItem victim
+        return this
       for suspect, index in data.keys when suspect is victim
         data.keys.splice index, 1
         break

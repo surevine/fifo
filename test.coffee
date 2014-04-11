@@ -77,11 +77,11 @@ equal collection.get('empty2'), undefined, 'empty2 emptied'
 fixedValue = 'value'
 fixedKey = 'fixed'
 collection.setFixed fixedKey, fixedValue
-fixed = collection.getFixed fixedKey
+fixed = collection.get fixedKey
 equal fixed, fixedValue, 'Fixed key added'
-collection.removeFixed fixedKey
-fixed = collection.getFixed fixedKey
-equal fixed, null, 'Fixed key has been removed'
+collection.remove fixedKey
+fixed = collection.get fixedKey
+equal fixed, undefined, 'Fixed key has been removed'
 
 # test: Fixed keys can be added once FIFO queue full
 #       then add additional items to FIFO queue and 
@@ -109,10 +109,19 @@ until limitReached or i is 15000 # don't wan't to freeze the browser
   key = "test:#{i}"
   collection.set key, n100k, fifoQueueOnLimit
     
-equal collection.getFixed('fixed-key').length, n1m.length, 'Fixed value retrieved successfully'
+equal collection.get('fixed-key').length, n1m.length, 'Fixed value retrieved successfully'
 equal removedItem.key, 'test:1', 'Expected value removed'
 equal removedItemForFixedKey.key, 'test:2', 'Expected value removed to fit fixed key'
 equal removedItemForFifo.key, 'test:12', 'Expected value removed from FIFO queue'
+
+# test get all values
+localStorage.clear()
+collection = fifo 'fifo:test'
+collection.setFixed 'fixed-key', 'fixed-value'
+collection.set 'fifo-key', 'fifo-value'
+equal Object.keys(collection.get()).length, 2, 'Values fetched successfully'
+equal collection.get()['fifo-key'], 'fifo-value', 'Fetched fifo key correctly'
+equal collection.get()['fixed-key'], 'fixed-value', 'Fetched fixed key correctly'
 
 # test get keys
 localStorage.clear()
