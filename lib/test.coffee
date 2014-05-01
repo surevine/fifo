@@ -139,12 +139,11 @@ collection.setFixed 'fixed-key', 'fixed-value'
 collection.set 'fifo-key', 'fifo-value'
 equal collection.has('fixed-key'), true, 'Has fixed key'
 equal collection.has('fifo-key'), true, 'Has fifo key'
-equal collection.has('loose-key'), false, 'Hasn\'t loose key'
+equal collection.has('lose-key'), false, 'Hasn\'t lost key'
 
 
 # report
-status = if failed is 0 then 'ok' else 'not ok'
-log "\n#{status}", "#{passed}/#{testCount}"
-
 end = +new Date()
 log 'finished in:', end - start, 'ms'
+status = if failed is 0 then 'ok' else 'not ok'
+log "\nRESULT #{status}", "#{passed}/#{testCount}"
