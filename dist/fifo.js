@@ -61,8 +61,12 @@
       };
       return {
         set: function(key, value, onRemoved) {
-          var removed;
+          var index, removed;
           data.items[key] = value;
+          index = data.keys.indexOf(key);
+          if (index > -1) {
+            data.keys.splice(index, 1);
+          }
           data.keys.unshift(key);
           removed = save();
           if (onRemoved && removed.length) {

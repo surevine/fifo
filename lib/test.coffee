@@ -149,6 +149,19 @@ collection.set 'fifo-key', 'fifo-value'
 collection.keys()
 equal collection.keys().length, 2, 'Data has been replicated'
 
+console.log ''
+console.log ''
+console.log ''
+# test old key is cleaned up when saved
+localStorage.clear()
+collection = fifo 'fifo:test'
+collection.set 'A', '1'
+collection.set 'B', '2'
+collection.set 'C', '3'
+equal collection.keys().length, 3, 'Correct amount of keys set'
+collection.set 'A', '4'
+equal collection.keys().length, 3, 'Correct amount of keys set'
+
 # report
 end = +new Date()
 log 'finished in:', end - start, 'ms'

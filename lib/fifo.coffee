@@ -47,7 +47,12 @@
 
     set: (key, value, onRemoved) ->
       data.items[key] = value
+      
+      index = data.keys.indexOf key
+      data.keys.splice(index, 1) if index > -1
+            
       data.keys.unshift key
+      
       removed = save()
       onRemoved.call this, removed if onRemoved and removed.length
       this
