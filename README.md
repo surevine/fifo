@@ -82,6 +82,24 @@ running `npm install .` from the root of this repository. Also, run
 
 Test by opening `test.html` in a browser.
 
+Alternatively install phantomjs using:
+
+```
+npm i -g phantomjs
+```
+
+Install dependencies as normal:
+
+```
+npm i .
+```
+
+...and enjoy automated testing goodness by running:
+
+```
+npm test
+```
+
 License
 -------
 
