@@ -94,7 +94,10 @@
         },
         keys: function() {
           var keys;
-          keys = data.keys;
+          keys = [];
+          data.keys.forEach(function(key) {
+            return keys.push(key);
+          });
           Object.keys(localStorage).forEach(function(value) {
             if (value !== namespace) {
               return keys.push(value);

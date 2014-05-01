@@ -141,6 +141,13 @@ equal collection.has('fixed-key'), true, 'Has fixed key'
 equal collection.has('fifo-key'), true, 'Has fifo key'
 equal collection.has('lose-key'), false, 'Hasn\'t lost key'
 
+# test 'keys' isn't replicated due to pass by reference
+localStorage.clear()
+collection = fifo 'fifo:test'
+collection.setFixed 'fixed-key', 'fixed-value'
+collection.set 'fifo-key', 'fifo-value'
+collection.keys()
+equal collection.keys().length, 2, 'Data has been replicated'
 
 # report
 end = +new Date()

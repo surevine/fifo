@@ -68,7 +68,9 @@
       this
         
     keys: ->
-        keys = data.keys
+        keys = []
+        data.keys.forEach (key) ->
+          keys.push key
         Object.keys(localStorage).forEach (value) ->
           keys.push(value) if value != namespace 
         return keys
