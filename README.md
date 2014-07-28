@@ -43,6 +43,10 @@ var tasks = collection.get();
 // remove an item - preference for fixed items, then FIFO queue
 collection.remove('task:1');
 
+If you provide a function or a regex to ```remove``` then multiple entries 
+can/will be removed. The function is passed the current key. Return __true__ 
+to remove, __false__ to keep.
+
 // empty an entire FIFO queue
 collection.empty()
 
