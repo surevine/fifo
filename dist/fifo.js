@@ -119,6 +119,30 @@
           return false;
         },
         remove: function(victim) {
+          if (typeof victim === 'string') {
+            return this._removeByString(victim);
+          }
+          if (victim instanceof RegExp) {
+            return this._removeByRegExp(victim);
+          }
+          return this._removeByFunction(victim);
+        },
+        _removeByRegExp: function(victim) {
+          Object.keys(localStorage).forEach(function(value) {
+            if (value.match(victim)) {
+              return localStorage.removeItem(value);
+            }
+          });
+          data.keys.forEach(function(suspect, index) {
+            if (suspect.match(victim)) {
+              data.keys.splice(index, 1);
+              return delete data.items[victim];
+            }
+          });
+          save();
+          return this;
+        },
+        _removeByString: function(victim) {
           var index, suspect, _i, _len, _ref;
           if (localStorage.getItem(victim)) {
             localStorage.removeItem(victim);

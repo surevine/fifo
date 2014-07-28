@@ -162,6 +162,19 @@ equal collection.keys().length, 3, 'Correct amount of keys set'
 collection.set 'A', '4'
 equal collection.keys().length, 3, 'Correct amount of keys set'
 
+# Can remove items using a regex
+localStorage.clear()
+collection = fifo 'fifo:test'
+collection.setFixed 'fixed-key', 'fixed-value'
+collection.setFixed 'fixed-regex-key', 'fixed-regex-value'
+collection.set 'fifo-regex-key', 'fifo-value'
+collection.set 'fifo-key', 'fifo-regex-value'
+collection.remove /regex/
+equal collection.has('fixed-key'), true, 'Has fixed key'
+equal collection.has('fixed-regex-key'), false, 'Missing fixed-regex key'
+equal collection.has('fifo-key'), true, 'Has fifo key'
+equal collection.has('fifo-regex-key'), false, 'Missing fifo-regex key'
+
 # report
 end = +new Date()
 log 'finished in:', end - start, 'ms'

@@ -86,6 +86,23 @@
         false
         
     remove: (victim) ->
+        
+      return this._removeByString(victim) if typeof victim is 'string'
+      return this._removeByRegExp(victim) if (victim instanceof RegExp)
+      return this._removeByFunction victim
+    
+    _removeByRegExp: (victim) ->
+      Object.keys(localStorage).forEach (value) ->
+        localStorage.removeItem(value) if value.match victim
+      data.keys.forEach (suspect, index) ->
+        if suspect.match victim 
+          data.keys.splice index, 1
+          delete data.items[victim]
+      save()
+      this
+        
+        
+    _removeByString: (victim) ->
       if localStorage.getItem victim
         localStorage.removeItem victim
         return this
