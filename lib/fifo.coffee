@@ -97,11 +97,20 @@
       data.keys.forEach (suspect, index) ->
         if suspect.match victim 
           data.keys.splice index, 1
-          delete data.items[victim]
+          delete data.items[suspect]
       save()
       this
-        
-        
+            
+    _removeByFunction: (victim) ->
+      Object.keys(localStorage).forEach (value) ->
+        localStorage.removeItem(value) if victim value
+      data.keys.forEach (suspect, index) ->
+        if victim suspect
+          data.keys.splice index, 1
+          delete data.items[suspect]
+      save()
+      this
+            
     _removeByString: (victim) ->
       if localStorage.getItem victim
         localStorage.removeItem victim

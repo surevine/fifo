@@ -136,7 +136,22 @@
           data.keys.forEach(function(suspect, index) {
             if (suspect.match(victim)) {
               data.keys.splice(index, 1);
-              return delete data.items[victim];
+              return delete data.items[suspect];
+            }
+          });
+          save();
+          return this;
+        },
+        _removeByFunction: function(victim) {
+          Object.keys(localStorage).forEach(function(value) {
+            if (victim(value)) {
+              return localStorage.removeItem(value);
+            }
+          });
+          data.keys.forEach(function(suspect, index) {
+            if (victim(suspect)) {
+              data.keys.splice(index, 1);
+              return delete data.items[suspect];
             }
           });
           save();
