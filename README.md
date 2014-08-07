@@ -112,5 +112,7 @@ License
 
 MIT-Style license
 
+Originally forked from https://github.com/rpflorence/fifo
+
 [perf]:http://jsperf.com/localstorage-string-size-retrieval
 
