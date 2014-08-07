@@ -15,7 +15,7 @@ callback giving you the option to do something with them.
 Additionally, `fifo` also stores all of your `key:value` pairs on one key
 in `localStorage` for [better performance][perf].
 
-Build status: [![Build Status](https://travis-ci.org/rpflorence/fifo.svg?branch=master)](https://travis-ci.org/reflorence/fifo)
+Build status: [![Build Status](https://travis-ci.org/surevine/fifo.svg?branch=master)](https://travis-ci.org/surevine/fifo)
 
 API
 ---
