@@ -189,6 +189,22 @@ equal collection.has('fixed-regex-key'), false, 'Missing fixed-regex key'
 equal collection.has('fifo-key'), true, 'Has fifo key'
 equal collection.has('fifo-regex-key'), false, 'Missing fifo-regex key'
 
+# Can limit the fifo queue size
+localStorage.clear()
+collection = fifo 'fifo:test'
+collection.setQueueLimit 3
+collection.set 'key1', 'value1'
+collection.set 'key2', 'value2'
+collection.set 'key3', 'value3'
+collection.set 'key4', 'value4'
+collection.set 'key5', 'value5'
+collection.set 'key6', 'value6'
+equal collection.keys().length, 3, 'Correct amount of keys set'
+equal collection.has('key6'), true, 'Expected key6 to be in place'
+equal collection.has('key5'), true, 'Expected key5 to be in place'
+equal collection.has('key4'), true, 'Expected key4 to be in place'
+equal collection.has('key3'), false, 'Expected key3 to *not* be in place'
+    
 # report
 end = +new Date()
 log 'finished in:', end - start, 'ms'

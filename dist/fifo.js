@@ -14,12 +14,16 @@
     }
   })(this, function() {
     return function(namespace) {
-      var data, removeFirstIn, save, trySave;
+      var data, queueLimit, removeFirstIn, save, trySave;
       data = JSON.parse(localStorage.getItem(namespace) || '{"keys":[],"items":{}}');
+      queueLimit = null;
       trySave = function(key, value) {
         var error;
         try {
           if (!key) {
+            if (queueLimit && (data.keys.length > queueLimit)) {
+              return false;
+            }
             localStorage.setItem(namespace, JSON.stringify(data));
           } else {
             localStorage.setItem(key, value);
@@ -126,6 +130,9 @@
             return this._removeByRegExp(victim);
           }
           return this._removeByFunction(victim);
+        },
+        setQueueLimit: function(limit) {
+          return queueLimit = limit;
         },
         _removeByRegExp: function(victim) {
           Object.keys(localStorage).forEach(function(value) {

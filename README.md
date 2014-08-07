@@ -63,6 +63,9 @@ collection.keys  /* Returns an array of key names */
 
 // Check to see if a key exists in the FIFO queue or fixed localstorage
 collection.has 'key' /* true or false */
+
+// Limit the FIFO queue size
+collection.setQueueLimit 10  /* A maximum of 10 items */
 ```
 
 Warning

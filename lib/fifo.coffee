@@ -14,10 +14,14 @@
 
     data = JSON.parse localStorage.getItem(namespace) or '{"keys":[],"items":{}}'
 
+    queueLimit = null
+    
     trySave = (key, value) ->
 
       try
         if not key
+          return false if queueLimit && (data.keys.length > queueLimit)
+                
           localStorage.setItem namespace, JSON.stringify data
         else
           localStorage.setItem key, value
@@ -90,6 +94,9 @@
       return this._removeByString(victim) if typeof victim is 'string'
       return this._removeByRegExp(victim) if (victim instanceof RegExp)
       return this._removeByFunction victim
+    
+    setQueueLimit: (limit) ->
+        queueLimit = limit
     
     _removeByRegExp: (victim) ->
       Object.keys(localStorage).forEach (value) ->
